@@ -1,1 +1,7 @@
-<h1>Welcome to my Shop!</h1>
+<h2>Tags & Filters</h2>
+
+{%  assign products = collections['hydrogen'].products %}
+
+{% for product in products %}
+  <h1>{{ product.title }} - {{ product.price | money }}</h1>
+{% endfor %}
