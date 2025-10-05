@@ -2,6 +2,7 @@
 
 {%  assign products = collections['hydrogen'].products %}
 
+{{ section.settings.hide_soldout }}
 {% for product in products %}
   <li>
     <a style="color: {{ settings.link_color }};" href="{{ product.url }}">
