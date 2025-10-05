@@ -6,5 +6,16 @@
     "theme_author": "Nikhil",
     "theme_documentation_url": "https://github.com/shopify/shopify-cli",
     "theme_support_url": "https://github.com/shopify/shopify-cli/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "link_color",
+        "label": "Link Color",
+        "default": "#000"
+      }
+    ]
   }
 ]
