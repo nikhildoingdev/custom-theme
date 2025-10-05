@@ -1,11 +1,10 @@
-<h1>Hi Moemen, I'm Just Testing 😊</h1>
-<h2>Tags & Filters</h2>
+<h2>Products</h2>
 
 {%  assign products = collections['hydrogen'].products %}
 
-{% for product in prodcuts %}
+{% for product in products %}
   <li>
-    <a href="{{ product.url }}">
+    <a style="color: {{ settings.link_color }};" href="{{ product.url }}">
       {{ product.title }} - {{ product.price }}
     </a>
   </li>
