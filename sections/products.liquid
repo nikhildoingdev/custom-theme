@@ -1,0 +1,25 @@
+<h2>Products</h2>
+
+{%  assign products = collections['hydrogen'].products %}
+
+{% for product in products %}
+  <li>
+    <a style="color: {{ settings.link_color }};" href="{{ product.url }}">
+      {{ product.title }} - {{ product.price }}
+    </a>
+  </li>
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Products",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_soldout",
+      "label": "Hide Sold Out Products",
+      "default": false
+    }
+    ]
+}
+{% endschema %}
