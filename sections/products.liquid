@@ -5,7 +5,7 @@
 {% for product in products %}
   {% unless section.settings.hide_soldout and product.available == false %}
     <li>
-      <a style="color: {{ settings.link_color }};" href="{{ product.url }}">
+      <a style="color: {{ section.settings.link_color }};" href="{{ product.url }}">
         {{ product.title }} - {{ product.price }}
       </a>
       </li>
