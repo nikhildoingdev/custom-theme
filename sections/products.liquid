@@ -3,13 +3,13 @@
 {%  assign products = collections['hydrogen'].products %}
 
 {% for product in products %}
-  <li>
-    {% unless section.settings.hide_soldout and product.available == false %}
+  {% unless section.settings.hide_soldout and product.available == false %}
+    <li>
       <a style="color: {{ settings.link_color }};" href="{{ product.url }}">
         {{ product.title }} - {{ product.price }}
       </a>
+      </li>
     {% endunless %}
-  </li>
 {% endfor %}
 
 {% schema %}
