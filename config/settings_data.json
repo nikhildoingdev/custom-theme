@@ -1,0 +1,14 @@
+{
+  "current": {
+    "sections": {
+      "products": {
+        "type": "products",
+        "settings": {
+          "hide_soldout": true,
+          "link_color": "#000000"
+        }
+      }
+    },
+    "content_for_index": []
+  }
+}
