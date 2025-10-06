@@ -1,0 +1,138 @@
+<section class="featured-section">
+    <div class="featured-section__nav">
+        <h2 class="featured-section__title">FEATURED PRODUCTS</h2>
+        <a class="featured-section__seeall">SEE ALL</a>
+    </div>
+    <div class="featured-section__grid">
+        <div class="featured-section__product-container">
+            <p class="featured-section__product-status">NEW</p>
+            <div class="featured-section__product-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/Bobbi_Kit_PDP_-_CHIC_-_1_a7b0cae1-3a64-4a1d-a82d-fb7de5b40f5a.png?crop=center&height=720&v=1759402333&width=720" />
+            </div>
+            <div class="featured-section__product-title">
+                <p>THE BOBBY KIT 5.0</p>
+            </div>
+            <div class="featured-section__product-price">
+                <button>SHOP NOW</button>
+                <button>$88</button>
+            </div>
+        </div>
+
+        <div class="featured-section__product-container" onclick="window.location.href='learn.html'">
+            <p class="featured-section__product-status">NEW</p>
+            <div class="featured-section__product-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/ClassicLip_Tulip_01_ad112dfb-7b4d-4e4c-b42c-ec3506a5c2b6.png?crop=center&height=720&v=1756744744&width=720" />
+            </div>
+            <div class="featured-section__product-title">
+                <p>THE CLASSIC LIP</p>
+            </div>
+            <div class="featured-section__product-price">
+                <button>SHOP NOW</button>
+                <button>$30</button>
+            </div>
+        </div>
+
+        <div class="featured-section__product-container">
+            <p class="featured-section__product-status">BESTSELLER</p>
+            <div class="featured-section__product-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/miraclebalm_pinchedcheeks_1_5bdaee7f-49a5-4702-b43c-6d6c87252f44.jpg?crop=center&height=720&v=1739188719&width=720" />
+            </div>
+            <div class="featured-section__product-title">
+                <p>MIRACLE BALM</p>
+            </div>
+            <div class="featured-section__product-price">
+                <button>SHOP NOW</button>
+                <button>$40</button>
+            </div>
+        </div>
+
+        <div class="featured-section__product-container">
+            <p class="featured-section__product-status">BESTSELLER</p>
+            <div class="featured-section__product-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/JETM_alabaster_1.jpg?crop=center&height=720&v=1741887001&width=720" />
+            </div>
+            <div class="featured-section__product-title">
+                <p>JUST ENOUGH TINTED MOISTURIZER</p>
+            </div>
+            <div class="featured-section__product-price">
+                <button>SHOP NOW</button>
+                <button>$44</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+  
+.featured-section,
+.collection {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin: 3rem;
+}
+
+.featured-section__nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.featured-section__title,
+.collection__title {
+  font-size: 1rem;
+}
+
+.featured-section__seeall {
+  cursor: pointer;
+}
+
+.featured-section__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.featured-section__product-container {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.featured-section__product-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 1rem;
+}
+
+.featured-section__product-price {
+  width: 100%;
+  display: flex;
+  gap: 1px;
+  display: none;
+}
+
+.featured-section__product-price > button {
+  background: #000;
+  color: #fff;
+  border: 1px solid transparent;
+  width: 100%;
+  padding: 0.25rem 0.25rem;
+  font-size: 0.75rem;
+  text-wrap: nowrap;
+}
+
+.featured-section__product-price > button:nth-child(2) {
+  width: fit-content;
+}
+
+.featured-section__product-status {
+  position: absolute;
+  padding: 1rem;
+  right: 0;
+  font-size: 0.75rem;
+  color: #f50a99;
+}
+</style>

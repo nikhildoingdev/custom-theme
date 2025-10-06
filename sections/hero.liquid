@@ -1,0 +1,84 @@
+<section class="hero-section">
+    <div class="hero-section__image-container-desktop">
+        <img src="https://www.jonesroadbeauty.com/cdn/shop/files/Classic_Lip_Desktop_2.png?v=1758140070&width=2000" />
+    </div>
+    <div class="hero-section__image-container-mobile">
+        <img src="https://www.jonesroadbeauty.com/cdn/shop/files/Classic_Lip_Mobile_5.jpg?v=1758140068&width=1500" />
+    </div>
+    <div class="hero-section__about">
+        <h1 class="hero-section__title">
+            <p>Love Your</p>
+            <p>Lipstick Again</p>
+        </h1>
+        <p class="hero-section__description">
+            Meet the NEW Classic Lip - a fresh and modern take on classic
+            finishing touch.
+        </p>
+        <a href="#" class="hero-section__cta">SHOP NOW</a>
+    </div>
+</section>
+
+<style>
+    .hero-section {
+        max-width: 1920px;
+        margin: auto;
+        position: relative;
+        /* border: 1px solid #000; */
+    }
+
+    .hero-section__image-container-mobile {
+        display: none;
+    }
+
+    .hero-section__image-container-desktop {
+        width: 100%;
+    }
+
+    .hero-section__about {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-left: 3rem;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 34%;
+    }
+
+    .hero-section__title {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .hero-section__title>p {
+        font-weight: 400;
+        font-family: var(--decoration-font);
+        font-size: 2.5rem;
+        padding: 0 1rem;
+        width: fit-content;
+        background: #fff;
+    }
+
+    .hero-section__description {
+        letter-spacing: 1px;
+        line-height: 2rem;
+    }
+
+    .hero-section__cta {
+        background: #000;
+        width: fit-content;
+        font-size: 1rem;
+        text-decoration: none;
+        color: #fff;
+        padding: 0.5rem 2rem;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .hero-section__cta:hover {
+        background: #fff;
+        color: #000;
+    }
+</style>
