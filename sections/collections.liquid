@@ -1,0 +1,88 @@
+<section class="collection">
+    <h2 class="collection__title">SHOP BY COLLECTION</h2>
+    <div class="collection__grid">
+        <div class="collection__category">
+            <div class="collection__category-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/PDP_face_2_x1000.jpg?v=1690828399" />
+            </div>
+            <button class="collection__category-button">SHOP FACE</button>
+        </div>
+
+        <div class="collection__category">
+            <div class="collection__category-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/PDP_skin_4_1_x1000.jpg?v=1690830454" />
+            </div>
+            <button class="collection__category-button">SHOP SKIN</button>
+        </div>
+
+        <div class="collection__category">
+            <div class="collection__category-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/PDP_eyes_3_1_x1000.jpg?v=1690830443" />
+            </div>
+            <button class="collection__category-button">SHOP EYES</button>
+        </div>
+
+        <div class="collection__category">
+            <div class="collection__category-image-container">
+                <img src="https://www.jonesroadbeauty.com/cdn/shop/files/PDP_Lips_1_1_x1000.jpg?v=1690830426" />
+            </div>
+            <button class="collection__category-button">SHOP LIPS</button>
+        </div>
+    </div>
+</section>
+
+<style>
+  .collection {
+  margin: 0;
+}
+
+.collection__title {
+  margin: 3rem 3rem 0 3rem;
+}
+
+.collection__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.collection__category {
+  position: relative;
+}
+
+.collection__category-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 0.5rem;
+  background: #fff;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  padding: 1rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.collection__category-button:hover {
+  background: transparent;
+  border: 1px solid#fff;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .collection__title {
+    margin: 1rem 1rem 0 1rem;
+  }
+
+  .collection__grid{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .collection__category-button{
+    font-size: 0.65rem;
+    padding: .5rem;
+  }
+}
+</style>

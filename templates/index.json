@@ -8,6 +8,14 @@
       "type": "featured",
       "settings": {}
     },
+    "brand-carousel": {
+      "type": "brand-carousel",
+      "settings": {}
+    },
+    "collections": {
+      "type": "collections",
+      "settings": {}
+    },
     "products": {
       "type": "products",
       "settings": {}
@@ -16,6 +24,8 @@
   "order": [
     "hero",
     "featured",
+    "brand-carousel",
+    "collections",
     "products"
   ]
 }
