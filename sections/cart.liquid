@@ -1,7 +1,36 @@
 <div class="cart__page">
   {% if cart.empty? %}
-    The Cart is Empty
+    <div class="cart__empty">
+      <p>Your bag is empty (for now).</p>
+      <a href="/" class="cart__shopping-link">Start Shopping</a>
+    </div>
     {% else %}
-      
+      {% for item in cart.items %}
+        {{ item }}
+      {% endfor %}
   {% endif %}
 </div>
+
+<style>
+  .cart__empty{
+    display: flex;
+    height: 80%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .cart__shopping-link{
+    background: #000;
+    color: #fff;
+    padding: 1rem 2rem;
+    border: 1px solid #000;
+    transition: all .3s ease-in-out;
+  }
+
+  .cart__shopping-link:hover{
+    background: #fff;
+    color: #000;
+  }
+</style>
