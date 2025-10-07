@@ -1,37 +1,56 @@
 <div class="cart__page">
-  {% if cart.empty? %}
+    {% if cart.empty? %}
     <div class="cart__empty">
-      <p>Your bag is empty (for now).</p>
-      <a href="/" class="cart__shopping-link">Start Shopping</a>
+        <p>Your bag is empty (for now).</p>
+        <a href="/" class="cart__shopping-link">Start Shopping</a>
     </div>
     {% else %}
-      {% for item in cart.items %}
-        {{ item }}
-        <a href="/cart/clear">Clear Cart</a>
-      {% endfor %}
-  {% endif %}
+    <div>
+        {% for item in cart.items %}
+        <div>
+            <div class="image-container">
+                <img src="{{ item.image |  image_url: width: 100 }}" alt="{{ item.image.alt }}">
+            </div>
+            <div>
+                <h2>{{ item.product.title }}</h2>
+                {% if item.variant.title != 'Default Title' %}
+                <p>{{ item.variant.title }}</p>
+                {% endif %}
+                <p>{{ item.unit_price }}</p>
+                <p>{{ item.quantity }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="/cart/clear">Clear Cart</a>
+    {% endif %}
 </div>
 
 <style>
-  .cart__empty{
-    display: flex;
-    height: 80%;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 2rem;
-  }
+    .cart__empty {
+        display: flex;
+        height: 80%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 2rem;
+    }
 
-  .cart__shopping-link{
-    background: #000;
-    color: #fff;
-    padding: 1rem 2rem;
-    border: 1px solid #000;
-    transition: all .3s ease-in-out;
-  }
+    .cart__shopping-link {
+        background: #000;
+        color: #fff;
+        padding: 1rem 2rem;
+        border: 1px solid #000;
+        transition: all .3s ease-in-out;
+    }
 
-  .cart__shopping-link:hover{
-    background: #fff;
-    color: #000;
-  }
+    .cart__shopping-link:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    .image-container{
+      width: 100px;
+      height: 100px;
+    }
 </style>

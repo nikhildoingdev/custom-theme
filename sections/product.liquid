@@ -331,9 +331,6 @@
     const variantSelect = document.querySelector('.product__variant-select');
     const priceElement = document.querySelector('.product__price');
 
-    console.log(variantSelect)
-    console.log(priceElement)
-
     variantSelect.addEventListener('change', function() {
         const selectedOption = variantSelect.options[variantSelect.selectedIndex];
         const price = selectedOption.getAttribute('data-price');
