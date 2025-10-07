@@ -27,9 +27,9 @@
                         {% endif %}
                     </p>
                     <div class="cart__item-quantity">
-                        <a href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity |  minus: 1 }}">-</a>
-                        <p>{{ item.quantity }}</p>
-                        <a href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity |  plus: 1 }}">+</a>
+                        <span data-index="{{ forloop }}" class="cart__item-quantity-minus">-</span>
+                        <p class="cart__item-current-quantity">{{ item.quantity }}</p>
+                        <span data-index="{{ forloop.index }}" class="cart__item-quantity-plus">+</span>
                     </div>
                 </div>
             </div>
@@ -49,6 +49,30 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+  const quantityMinus = document.querySelector(".cart__item-quantity-minus");
+  const quantityPlus = document.querySelector(".cart__item-quantity-plus");
+  const quantity = document.querySelector(".cart__item-current-quantity");
+  const currentQuantity = Number(quantity.textContent);
+
+  quantityPlus.addEventListener('click', async ()=>{
+    const index = Number(quantityPlus.getAttribute('data-index'));
+    const res = await fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        line: index,
+        quantity: currentQuantity+1
+      })
+    })
+
+    console.log(res)
+    quantity.textContent = (currentQuantity + 1).toString();
+  })
+</script>
 
 <style>
     .cart__empty {
@@ -124,6 +148,7 @@
         justify-items: center;
         align-items: center;
         gap: 2rem;
+        cursor:pointer;
     }
 
     .cart__item-price {
@@ -144,10 +169,6 @@
     .cart__title h2 {
         font-size: 1.25rem;
         font-weight: 500;
-    }
-
-    .cart__title h2:nth-child(2) {
-        margin-left: 20rem;
     }
 
     .cart__clear,
