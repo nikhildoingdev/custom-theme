@@ -68,13 +68,12 @@
             let quantity = Number(quantityDisplay.textContent);
 
             quantity = isPlus ? quantity + 1 : quantity - 1;
-            console.log(quantity)
 
             if (quantity < 1){
                 window.location.href = `/cart/change?line=${index}&quantity=0`;
                 return
             }
-            
+
             const plusBtn = cartItem.querySelector('.cart__item-quantity-plus');
             const minusBtn = cartItem.querySelector('.cart__item-quantity-minus');
 
@@ -100,14 +99,12 @@
                 const res = await fetch('/cart.js');
                 const cart = await res.json();
 
-                console.log(cart);
-
                 updateCartUI(cart, cartItem);
 
             } catch (error) {
                 console.error('Error updating cart:', error);
             } finally {
-                // Re-enable buttons after request
+                
                 plusBtn.style.pointerEvents = 'auto';
                 minusBtn.style.pointerEvents = 'auto';
                 plusBtn.style.opacity = '1';
