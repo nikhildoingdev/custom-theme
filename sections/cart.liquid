@@ -11,7 +11,7 @@
     </div>
     <div class="cart__container">
         {% for item in cart.items %}
-        <div class="cart__item">
+        <div class="cart__item" data-index="{{ forloop.index }}">
             <div class="cart__item-product-details">
                 <div class="image-container">
                     <img src="{{ item.image |  image_url: width: 300 }}" alt="{{ item.image.alt }}">
@@ -21,26 +21,29 @@
                     {% if item.variant.title != 'Default Title' %}
                     <p class="cart__item-variant-title">{{ item.variant.title }}</p>
                     {% endif %}
-                    <p class="cart__item-price">{{ item.final_price | money }}
-                        {% if item.final_price != item.original_price %}
-                        <del>{{ item.original_price | money }}</del>
-                        {% endif %}
-                    </p>
+                    <div class="cart__item-price">
+                        <p class="cart__item-discounted-price">
+                            {{ item.final_price | money }}
+                        </p>
+                        <del class="cart__item-original-price">
+                            {{ item.original_price | money }}
+                        </del>
+                    </div>
                     <div class="cart__item-quantity">
-                        <span data-index="{{ forloop }}" class="cart__item-quantity-minus">-</span>
+                        <span data-index="{{ forloop.index }}" class="cart__item-quantity-minus">-</span>
                         <p class="cart__item-current-quantity">{{ item.quantity }}</p>
                         <span data-index="{{ forloop.index }}" class="cart__item-quantity-plus">+</span>
                     </div>
                 </div>
             </div>
             <div>
-                <p>{{ item.final_line_price |  money }}</p>
+                <p class="cart__item-final-price">{{ item.final_line_price |  money }}</p>
             </div>
         </div>
         {% endfor %}
         <div class="cart__total">
             <h2>Cart Total</h2>
-            <p>{{ cart.total_price | money }}</p>
+            <p class="cart__total-price">{{ cart.total_price | money }}</p>
         </div>
     </div>
     <div class="cart__footer">
@@ -51,55 +54,73 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const cartContainer = document.querySelector('.cart__container');
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.addEventListener('click', async (e) => {
+            const isPlus = e.target.classList.contains('cart__item-quantity-plus');
+            const isMinus = e.target.classList.contains('cart__item-quantity-minus');
 
-    cartContainer.addEventListener('click', async (event) => {
-        const isPlus = event.target.classList.contains('cart__item-quantity-plus');
-        const isMinus = event.target.classList.contains('cart__item-quantity-minus');
+            if (!isPlus && !isMinus) return;
 
-        if (!isPlus && !isMinus) return;
+            const index = Number(e.target.getAttribute('data-index'));
+            const cartItem = e.target.closest('.cart__item');
+            const finalPrice = cartItem.querySelector('.cart__item-final-price');
+            const quantityDisplay = cartItem.querySelector('.cart__item-current-quantity');
+            let quantity = Number(quantityDisplay.textContent);
 
-        const index = Number(event.target.getAttribute('data-index')); // 1-based
-        const cartItem = event.target.closest('.cart__item');
-        const quantityDisplay = cartItem.querySelector('.cart__item-current-quantity');
-        const currentQuantity = Number(quantityDisplay.textContent);
+            quantity = isPlus ? quantity + 1 : quantity - 1;
 
-        let newQuantity = isPlus ? currentQuantity + 1 : currentQuantity - 1;
+            if (quantity > 0) {
+                quantityDisplay.textContent = quantity;
+            }
 
-        if (newQuantity < 1) {
-            // Optional: Confirm before removing item or reload
-            window.location.href = `/cart/change?line=${index}&quantity=0`;
-            return;
-        }
+            try {
+                await fetch('/cart/change.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        line: index,
+                        quantity: quantity
+                    })
+                });
 
-        try {
-            const res = await fetch('/cart/change.js', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    line: index,
-                    quantity: newQuantity
-                })
-            });
+                const res = await fetch('/cart.js');
+                const cart = await res.json();
 
-            if (!res.ok) throw new Error('Cart update failed');
+                console.log(cart);
 
-            const data = await res.json();
-            // Update only this item's quantity visually
-            quantityDisplay.textContent = newQuantity.toString();
+                updateCartUI(cart, cartItem);
 
-            // Optionally: update total price, item price etc. using `data`
-            // or just reload entire cart area (less clean but easier for now)
-            location.reload(); // You can remove this if you update DOM manually
+            } catch (error) {
+                console.error('Error updating cart:', error);
+            }
 
-        } catch (error) {
-            console.error('Error updating cart:', error);
-        }
+            function updateCartUI(cart, cartItem) {
+                const index = Number(cartItem.getAttribute('data-index')) - 1;
+                const item = cart.items[index];
+
+                const discountedPrice = document.querySelector('.cart__item-discounted-price');
+                const originalPrice = document.querySelector('.cart__item-original-price');
+
+                if (item.final_price !== item.original_price) {
+                    discountedPrice.textContent = formatMoney(item.final_price)
+                } else {
+                    discountedPrice.textContent = formatMoney(item.final_price)
+                }
+
+                cartItem.querySelector('.cart__item-final-price').textContent = formatMoney(item.final_line_price);
+                document.querySelector('.cart__total-price').textContent = formatMoney(cart.total_price);
+            }
+
+            function formatMoney(cents) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(cents / 100)
+            }
+        });
     });
-});
 </script>
 
 <style>
@@ -181,13 +202,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     .cart__item-price {
         margin-top: 1rem;
+        display: flex;
+        gap: .5rem;
     }
 
     .cart__title,
     .cart__footer {
         padding: 1rem 2rem;
         display: flex;
-        gap: 1rem;
+        gap: .5rem;
     }
 
     .cart__title {
