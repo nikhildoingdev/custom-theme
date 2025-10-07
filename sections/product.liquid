@@ -27,7 +27,7 @@
         </div>
         {% form 'product', product %}
         {% if product.variants.size > 1 %}
-        <select name="id">
+        <select name="id" class="product__variant-select">
             {% for variant in product.variants %}
             <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
                 {{ variant.title }}
@@ -179,7 +179,7 @@
         width: 80%;
         padding: .75rem;
         border-radius: .25rem 0 0 .25rem;
-        margin-top: 2rem;
+        margin-top: 1rem;
         position: relative;
         transition: all .3s ease-in-out;
         border: 1px solid #000;
@@ -244,6 +244,12 @@
 
     details>p {
         padding: .5rem 0;
+    }
+
+    .product__variant-select{
+        display: block;
+        margin-top: 2rem;
+        padding: 1rem;
     }
 
     @media (max-width: 1024px) {
