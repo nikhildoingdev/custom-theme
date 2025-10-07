@@ -26,7 +26,17 @@
             <p>(76 Reviews)</p>
         </div>
         {% form 'product', product %}
+        {% if product.variants.size > 1 %}
+        <select name="id">
+            {% for variant in product.variants %}
+            <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
+                {{ variant.title }}
+            </option>
+            {% endfor %}
+        </select>
+        {% else %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% endif %}
         <button type="submit">ADD TO CART</button>
         {% endform %}
         <ul>
@@ -57,7 +67,7 @@
         </ul>
 
         <div class="faq">
-            <details>
+            <details open>
                 <summary>PRODUCT DESCRIPTION</summary>
                 <p>The Classic Lip is a lightweight, richly pigmented lipstick with a satin finish. It features peptides and vitamin E to smooth and condition your lips. Available in 12 shades from neutral to bold, it’s the kind of classic that never goes out of style.
                     <p>(3.4g / 0.12 oz)</p>
@@ -190,12 +200,12 @@
         transition: all .3s ease-in-out;
     }
 
-    .product-details>button:hover {
+    .product-details>form button:hover {
         color: #000;
         background: #fff;
     }
 
-    .product-details>button:hover::after {
+    .product-details>form button:hover::after {
         background: #fff;
         border-left: 1px solid #000;
     }
@@ -272,7 +282,6 @@
     const main_image = document.querySelector('.main-image-container img')
 
     let activePreview = preview_images[0];
-    fetch('/cart.js').then(res=>res.json()).then(data=>console.log(data))
     let DEFAULT_IMAGE = activePreview.querySelector('img').src.replace(/width=\d+/, 'width=800');
 
     main_image.src = DEFAULT_IMAGE;
@@ -308,5 +317,9 @@
                 }
             })
         })
+    })
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('/cart.js').then(res => res.json()).then(data => console.log(data));
     })
 </script>

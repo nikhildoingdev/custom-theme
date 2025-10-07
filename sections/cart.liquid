@@ -7,6 +7,7 @@
     {% else %}
       {% for item in cart.items %}
         {{ item }}
+        <a href="/cart/clear">Clear Cart</a>
       {% endfor %}
   {% endif %}
 </div>
