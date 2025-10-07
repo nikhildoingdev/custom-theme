@@ -51,27 +51,55 @@
 </div>
 
 <script>
-  const quantityMinus = document.querySelector(".cart__item-quantity-minus");
-  const quantityPlus = document.querySelector(".cart__item-quantity-plus");
-  const quantity = document.querySelector(".cart__item-current-quantity");
-  const currentQuantity = Number(quantity.textContent);
+document.addEventListener('DOMContentLoaded', () => {
+    const cartContainer = document.querySelector('.cart__container');
 
-  quantityPlus.addEventListener('click', async ()=>{
-    const index = Number(quantityPlus.getAttribute('data-index'));
-    const res = await fetch('/cart/change.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        line: index,
-        quantity: currentQuantity+1
-      })
-    })
+    cartContainer.addEventListener('click', async (event) => {
+        const isPlus = event.target.classList.contains('cart__item-quantity-plus');
+        const isMinus = event.target.classList.contains('cart__item-quantity-minus');
 
-    console.log(res)
-    quantity.textContent = (currentQuantity + 1).toString();
-  })
+        if (!isPlus && !isMinus) return;
+
+        const index = Number(event.target.getAttribute('data-index')); // 1-based
+        const cartItem = event.target.closest('.cart__item');
+        const quantityDisplay = cartItem.querySelector('.cart__item-current-quantity');
+        const currentQuantity = Number(quantityDisplay.textContent);
+
+        let newQuantity = isPlus ? currentQuantity + 1 : currentQuantity - 1;
+
+        if (newQuantity < 1) {
+            // Optional: Confirm before removing item or reload
+            window.location.href = `/cart/change?line=${index}&quantity=0`;
+            return;
+        }
+
+        try {
+            const res = await fetch('/cart/change.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    line: index,
+                    quantity: newQuantity
+                })
+            });
+
+            if (!res.ok) throw new Error('Cart update failed');
+
+            const data = await res.json();
+            // Update only this item's quantity visually
+            quantityDisplay.textContent = newQuantity.toString();
+
+            // Optionally: update total price, item price etc. using `data`
+            // or just reload entire cart area (less clean but easier for now)
+            location.reload(); // You can remove this if you update DOM manually
+
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        }
+    });
+});
 </script>
 
 <style>
@@ -148,7 +176,7 @@
         justify-items: center;
         align-items: center;
         gap: 2rem;
-        cursor:pointer;
+        cursor: pointer;
     }
 
     .cart__item-price {
@@ -189,21 +217,21 @@
         color: #000;
     }
 
-    .cart__total{
-      margin-top: 1rem;
-      display: flex;
-      align-self: flex-end;
-      align-items: center;
-      gap: 1rem;
+    .cart__total {
+        margin-top: 1rem;
+        display: flex;
+        align-self: flex-end;
+        align-items: center;
+        gap: 1rem;
     }
 
-    .cart__total>h2{
-      font-size: 1.2rem;
-      font-weight: 500;
+    .cart__total>h2 {
+        font-size: 1.2rem;
+        font-weight: 500;
     }
 
-    .cart__footer{
-      justify-self: flex-end;
-      align-self: flex-end;
+    .cart__footer {
+        justify-self: flex-end;
+        align-self: flex-end;
     }
 </style>
