@@ -5,24 +5,48 @@
         <a href="/" class="cart__shopping-link">Start Shopping</a>
     </div>
     {% else %}
-    <div>
+    <div class="cart__title">
+        <h2>Product</h2>
+        <h2>Total</h2>
+    </div>
+    <div class="cart__container">
         {% for item in cart.items %}
-        <div>
-            <div class="image-container">
-                <img src="{{ item.image |  image_url: width: 100 }}" alt="{{ item.image.alt }}">
+        <div class="cart__item">
+            <div class="cart__item-product-details">
+                <div class="image-container">
+                    <img src="{{ item.image |  image_url: width: 300 }}" alt="{{ item.image.alt }}">
+                </div>
+                <div class="cart__item-product-info">
+                    <h2 class="cart__item-product-title">{{ item.product.title }}</h2>
+                    {% if item.variant.title != 'Default Title' %}
+                    <p class="cart__item-variant-title">{{ item.variant.title }}</p>
+                    {% endif %}
+                    <p class="cart__item-price">{{ item.final_price | money }}
+                        {% if item.final_price != item.original_price %}
+                        <del>{{ item.original_price | money }}</del>
+                        {% endif %}
+                    </p>
+                    <div class="cart__item-quantity">
+                        <a href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity |  minus: 1 }}">-</a>
+                        <p>{{ item.quantity }}</p>
+                        <a href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity |  plus: 1 }}">+</a>
+                    </div>
+                </div>
             </div>
             <div>
-                <h2>{{ item.product.title }}</h2>
-                {% if item.variant.title != 'Default Title' %}
-                <p>{{ item.variant.title }}</p>
-                {% endif %}
-                <p>{{ item.unit_price }}</p>
-                <p>{{ item.quantity }}</p>
+                <p>{{ item.final_line_price |  money }}</p>
             </div>
         </div>
         {% endfor %}
+        <div class="cart__total">
+            <h2>Cart Total</h2>
+            <p>{{ cart.total_price | money }}</p>
+        </div>
     </div>
-    <a href="/cart/clear">Clear Cart</a>
+    <div class="cart__footer">
+        <a href="/cart/clear" class="cart__clear">Clear Cart</a>
+        <a href="/checkout" class="cart__checkout">Checkout</a>
+    </div>
     {% endif %}
 </div>
 
@@ -49,8 +73,116 @@
         color: #000;
     }
 
-    .image-container{
-      width: 100px;
-      height: 100px;
+    .cart__container {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 2rem;
+    }
+
+    .image-container {
+        width: 150px;
+        height: 150px;
+        border: 1px solid lightgray;
+        border-radius: .5rem;
+        overflow: hidden;
+    }
+
+    .cart__item {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid lightgray;
+        padding: 1rem 0;
+    }
+
+    .cart__item-product-details {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .cart__item-product-title {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .cart__item-variant-title {
+        background: #000;
+        color: #fff;
+        width: fit-content;
+        font-size: 0.75rem;
+        padding: 0.25rem 1rem;
+        border-radius: 0.25rem;
+        margin-top: .25rem;
+    }
+
+    .cart__item-quantity {
+        margin-top: .5rem;
+        padding: .5rem 1rem;
+        border: 1px solid #000;
+        width: fit-content;
+        min-width: 100px;
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .cart__item-price {
+        margin-top: 1rem;
+    }
+
+    .cart__title,
+    .cart__footer {
+        padding: 1rem 2rem;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .cart__title {
+        justify-content: space-between;
+    }
+
+    .cart__title h2 {
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    .cart__title h2:nth-child(2) {
+        margin-left: 20rem;
+    }
+
+    .cart__clear,
+    .cart__checkout {
+        border: 1px solid #000;
+        border-radius: .25rem;
+        padding: .5rem 2rem;
+    }
+
+    .cart__checkout {
+        background: #000;
+        color: #fff;
+        transition: all .3s ease-in-out;
+    }
+
+    .cart__checkout:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    .cart__total{
+      margin-top: 1rem;
+      display: flex;
+      align-self: flex-end;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .cart__total>h2{
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .cart__footer{
+      justify-self: flex-end;
+      align-self: flex-end;
     }
 </style>
