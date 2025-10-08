@@ -1,0 +1,5 @@
+<h1>Search Results for {{ search.terms }}</h1>
+
+{% for item in search.results %}
+  <li>{{ item.title }}</li>
+{% endfor %}
