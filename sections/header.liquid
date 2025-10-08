@@ -66,6 +66,8 @@
     const searchForm = document.querySelector('.header__search-form');
     document.querySelector('.header__search').addEventListener("click", () => {
       searchForm.style.display = "block";
+      searchForm.querySelector('input').focus();
+      searchForm.querySelector('input').select();
     })
 </script>
 

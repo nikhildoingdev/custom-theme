@@ -1,13 +1,236 @@
-<h1>Search Results for {{ search.terms }}</h1>
+{% assign product_results = false %}
+{% assign article_results = false %}
+{% assign page_results = false %}
 
-{% if search.types == "Product" %}
-  {% for item in search.results %}
-  <li>{{ item.title }}</li>
-  {% endfor %}
+{% for item in search.results %}
+{% if item.object_type == 'product' %}
+{% assign product_results = true %}
+{% elsif item.object_type == 'article' %}
+{% assign article_results = true %}
+{% elsif item.object_type == 'page' %}
+{% assign page_results = true %}
 {% endif %}
+{% endfor %}
 
-<div>
-  {% for type in search.types %}
-    {{ type }}
-  {% endfor %}
+<div class="search__results-container">
+    {% if search.results.size > 0 %}
+    <h2>Search results for `{{ search.terms }}`</h2>
+    {% if product_results %}
+    <div class="search__products-header">
+        <h3>Products</h3>
+
+        {%- assign sort_by = search.sort_by | default: search.default_sort_by -%}
+        <form action="/search" class="search__sort-by-form">
+            <input type="hidden" name="q" value="{{ search.terms | escape }}">
+            <div class="search__sort-by-container">
+                <select name="sort_by" class="search__sort-by" onchange="this.form.submit()">
+                    {% for option in search.sort_options %}
+                    <option value="{{ option.value }}" {% if option.value == sort_by %} selected {% endif %}>
+                        {{ option.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+    <ul class="search__products-grid">
+        {% assign has_products = false %}
+        {% for item in search.results %}
+        {% if item.object_type == "product" %}
+        {% assign has_products = true %}
+        <div class="search__product-container">
+            <div class="search__product-image-container">
+                <img src="{{ item.featured_image |  image_url: width: 400 }}" />
+            </div>
+            <div class="search__product-title">
+                <p>{{ item.title }}</p>
+            </div>
+            <a href="{{ item.url }}" class="search__product-price">
+                <span>SHOP NOW</span>
+                <span>{{ item.price | money }}</span>
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% if has_products == false %}
+        <li>No products found</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+
+    {% if article_results %}
+    <h3>Articles</h3>
+    <ul>
+        {% assign has_articles = false %}
+        {% for item in search.results %}
+        {% if item.object_type == "article" %}
+        {% assign has_articles = true %}
+        <li>{{ item.title }}</li>
+        {% endif %}
+        {% endfor %}
+        {% if has_articles == false %}
+        <li>No articles found</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+
+    {% if page_results %}
+
+    <h3>Pages</h3>
+    <ul>
+        {% assign has_pages = false %}
+        {% for item in search.results %}
+        {% if item.object_type == "page" %}
+        {% assign has_pages = true %}
+        <li>{{ item.title }}</li>
+        <li>{{ item.content }}</li>
+        {% endif %}
+        {% endfor %}
+        {% if has_pages == false %}
+        <li>No pages found</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+    {% else %}
+    <div class="search__empty">
+        <p>No results found</p>
+        <a href="/" class="search__all-products">All Products</a>
+    </div>
+    {% endif %}
 </div>
+
+<style>
+    .search__empty {
+        display: flex;
+        height: 80%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .search__all-products {
+        background: #000;
+        color: #fff;
+        padding: 1rem 2rem;
+        border: 1px solid #000;
+        transition: all .3s ease-in-out;
+    }
+
+    .search__all-products:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    .search__sort-by-form {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .search__sort-by-container {
+        border: 1px solid #000;
+        padding-right: 1rem;
+        border-radius: .25rem;
+    }
+
+    .search__sort-by {
+        display: block;
+        padding: .5rem 1rem;
+        border: 0;
+        outline: 0;
+        border-radius: .25rem;
+    }
+
+    .search__sort-by-button {
+        padding: .5rem 1rem;
+        border: 1px solid #000;
+        background: #000;
+        color: #fff;
+        transition: all .3s ease-in-out;
+        cursor: pointer;
+        border-radius: .25rem;
+    }
+
+    .search__sort-by-button:hover {
+        color: #000;
+        background: #fff;
+    }
+
+    .search__results-container {
+        padding: 2rem;
+    }
+
+    .search__products-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    h2{
+      font-weight: 500;
+    }
+
+    h3{
+      font-weight: 500;
+    }
+
+    .search__products-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .search__product-container {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .search__product-image-container {
+        height: 400px;
+    }
+
+    .search__product-image-container>img{
+      object-fit: contain;
+    }
+
+    .search__product-title {
+        text-align: center;
+        font-weight: 600;
+        padding: 1rem;
+    }
+
+    .search__product-price {
+        width: 100%;
+        gap: 1px;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        text-align: center;
+    }
+
+    .search__product-price>span {
+        background: #000;
+        color: #fff;
+        border: 1px solid #000;
+        width: 100%;
+        padding: 1rem;
+        text-wrap: nowrap;
+        border-radius: .25rem 0 0 .25rem;
+        transition: all .3s ease-in-out;
+    }
+
+    .search__product-price>span:nth-child(2) {
+        width: fit-content;
+        border-radius: 0 .25rem .25rem 0;
+    }
+
+    .search__product-price:hover span {
+        background: #fff;
+        color: #000;
+    }
+</style>

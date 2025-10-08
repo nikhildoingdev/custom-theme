@@ -27,13 +27,15 @@
         </div>
         {% form 'product', product %}
         {% if product.variants.size > 1 %}
-        <select name="id" class="product__variant-select">
-            {% for variant in product.variants %}
-            <option data-price="{{ variant.price |  money_without_currency }}" value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% assign variant_price = variant.price | money %}{% endif %}>
-                {{ variant.title }}
-            </option>
-            {% endfor %}
-        </select>
+        <div class="product__variant-select-container">
+            <select name="id" class="product__variant-select">
+                {% for variant in product.variants %}
+                <option data-price="{{ variant.price |  money_without_currency }}" value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% assign variant_price = variant.price | money %}{% endif %}>
+                    {{ variant.title }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
         {% else %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         {% endif %}
@@ -247,10 +249,18 @@
         padding: .5rem 0;
     }
 
+    .product__variant-select-container{
+        margin-top: 2rem;
+        border: 1px solid #000;
+        width: fit-content;
+        padding-right: 1rem;
+        border-radius: .25rem;
+    }
+
     .product__variant-select {
         display: block;
-        margin-top: 2rem;
         padding: 1rem;
+        border: 0;
         outline: 0;
         border-radius: .25rem;
     }
