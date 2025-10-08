@@ -1,5 +1,13 @@
 <h1>Search Results for {{ search.terms }}</h1>
 
-{% for item in search.results %}
+{% if search.types == "Product" %}
+  {% for item in search.results %}
   <li>{{ item.title }}</li>
-{% endfor %}
+  {% endfor %}
+{% endif %}
+
+<div>
+  {% for type in search.types %}
+    {{ type }}
+  {% endfor %}
+</div>
