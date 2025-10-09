@@ -81,11 +81,53 @@
                 <p>Skin-conditioning peptide made up of 3 amino acids (glycine, lysine, and histidine) that improves appearance of the skin/lips by looking smoother, firmer, and reducing the appearance of fine lines.</p>
             </details>
         </div>
+
+        <h2 class="product__creator-section-title">Created by</h2>
+        <div class="product__creators">
+            {% assign creators = product.metafields.custom.creators.value %}
+            {% for creator in creators %}
+                <div class="product__creator">
+                    <div class="product__creator-image">
+                        <img src="{{ creator.photo |  image_url: width: 200 }}">
+                    </div>
+                    <p class="product__creator-name">{{ creator.name }}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
 </section>
 
 <style>
+    .product__creators{
+        display: flex;
+        gap: 1rem;
+    }
+
+    .product__creator{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .25rem;
+    }
+
+    .product__creator-section-title{
+        font-weight: 500;
+        font-size: 1rem;
+        margin-top: 1rem;
+        margin-bottom: .5rem;
+    }
+
+    .product__creator-image{
+        width: 100px;
+        height: 100px;
+        border-radius: .25rem;
+        overflow: hidden;
+    }
+
+    .product__creator-name{
+    }
+
     section {
         margin: 1rem;
         display: flex;
