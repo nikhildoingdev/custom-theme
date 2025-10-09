@@ -18,13 +18,28 @@
     <div class="product-details">
         <h2>{{ product.title }}</h2>
         <div class="ratings">
+            {% if product.metafields.custom.product_rating %}
+            {% assign rating = product.metafields.custom.product_rating.rating |  default: 4 |  plus: 0 %}
             {% for i in (1..5) %}
+            {% if i <= rating %}
+
             <div class="star-icon-container">
                 <img src="https://img.icons8.com/material-rounded/24/star--v1.png" alt="star--v1" />
             </div>
+            {% else %}
+            <div class="star-icon-container">
+                <img src="https://img.icons8.com/metro/52/star.png" alt="star" />
+            </div>
+            {% endif %}
             {% endfor %}
+            <span class="rating-number">({{ rating }})</span>
+            {% else %}
+            <p class="product__reviews">No rating available.</p>
+            {% endif %}
             <p>(76 Reviews)</p>
         </div>
+
+
         {% form 'product', product %}
         {% if product.variants.size > 1 %}
         <div class="product__variant-select-container">
@@ -249,7 +264,7 @@
         padding: .5rem 0;
     }
 
-    .product__variant-select-container{
+    .product__variant-select-container {
         margin-top: 2rem;
         border: 1px solid #000;
         width: fit-content;
