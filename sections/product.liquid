@@ -39,7 +39,7 @@
         {% endif %}
         <button type="submit"><span>ADD TO CART</span><span class="product__price">${{ product.selected_or_first_available_variant.price |  money_without_currency }}</span></button>
         <script type="application/json" id="product__variants-json">
-        {% comment %} {{ product.variants |  json }} {% endcomment %}
+        {{ product.variants |  json }}
         </script>
         {% endform %}
         <ul>
@@ -396,6 +396,11 @@
         const selectedOption = variantSelect.options[variantSelect.selectedIndex];
         const price = selectedOption.getAttribute('data-price');
 
+        console.log(price)
         priceElement.textContent = `$${price}`;
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('/cart.js').then(res => res.json()).then(data => console.log(data));
+    })
 </script>

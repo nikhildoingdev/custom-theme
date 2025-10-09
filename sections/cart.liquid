@@ -119,20 +119,13 @@
                 const originalPrice = document.querySelector('.cart__item-original-price');
 
                 if (item.final_price !== item.original_price) {
-                    discountedPrice.textContent = formatMoney(item.final_price)
+                    discountedPrice.textContent = formatMoney(item.final_price, 'USD', 'en-US')
                 } else {
-                    discountedPrice.textContent = formatMoney(item.final_price)
+                    discountedPrice.textContent = formatMoney(item.final_price, 'USD', 'en-US')
                 }
 
-                cartItem.querySelector('.cart__item-final-price').textContent = formatMoney(item.final_line_price);
-                document.querySelector('.cart__total-price').textContent = formatMoney(cart.total_price);
-            }
-
-            function formatMoney(cents) {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                }).format(cents / 100)
+                cartItem.querySelector('.cart__item-final-price').textContent = formatMoney(item.final_line_price, 'USD', 'en-US');
+                document.querySelector('.cart__total-price').textContent = formatMoney(cart.total_price, 'USD', 'en-US');
             }
         });
     });

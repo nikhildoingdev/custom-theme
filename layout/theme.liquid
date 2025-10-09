@@ -1,12 +1,14 @@
 <head>
-  <title>{{ page_title }}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {{ content_for_header }}
-  {{ 'theme.css' | asset_url | stylesheet_tag }}
+    <title>{{ page_title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ content_for_header }}
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
 </head>
+
 <body>
-  {% section 'header' %}
-  <main>
-  {{ content_for_layout }}
-  </main>
+    {% section 'header' %}
+    <main>
+        {{ content_for_layout }}
+    </main>
+    <script src="{{ 'theme.js' |  asset_url }}"></script>
 </body>
