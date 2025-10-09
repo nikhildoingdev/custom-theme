@@ -1,3 +1,5 @@
+<script src="{{ 'product.js' |  asset_url }}"></script>
+
 <section>
     <div class="sub-section">
         <div class="product-images-carousel">
@@ -36,6 +38,9 @@
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         {% endif %}
         <button type="submit"><span>ADD TO CART</span><span class="product__price">${{ product.selected_or_first_available_variant.price |  money_without_currency }}</span></button>
+        <script type="application/json" id="product__variants-json">
+        {% comment %} {{ product.variants |  json }} {% endcomment %}
+        </script>
         {% endform %}
         <ul>
             <li>
@@ -86,12 +91,12 @@
         <div class="product__creators">
             {% assign creators = product.metafields.custom.creators.value %}
             {% for creator in creators %}
-                <div class="product__creator">
-                    <div class="product__creator-image">
-                        <img src="{{ creator.photo |  image_url: width: 200 }}">
-                    </div>
-                    <p class="product__creator-name">{{ creator.name }}</p>
+            <div class="product__creator">
+                <div class="product__creator-image">
+                    <img src="{{ creator.photo |  image_url: width: 200 }}">
                 </div>
+                <p class="product__creator-name">{{ creator.name }}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -99,34 +104,33 @@
 </section>
 
 <style>
-    .product__creators{
+    .product__creators {
         display: flex;
         gap: 1rem;
     }
 
-    .product__creator{
+    .product__creator {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: .25rem;
     }
 
-    .product__creator-section-title{
+    .product__creator-section-title {
         font-weight: 500;
         font-size: 1rem;
         margin-top: 1rem;
         margin-bottom: .5rem;
     }
 
-    .product__creator-image{
+    .product__creator-image {
         width: 100px;
         height: 100px;
         border-radius: .25rem;
         overflow: hidden;
     }
 
-    .product__creator-name{
-    }
+    .product__creator-name {}
 
     section {
         margin: 1rem;
@@ -287,7 +291,7 @@
         padding: .5rem 0;
     }
 
-    .product__variant-select-container{
+    .product__variant-select-container {
         margin-top: 2rem;
         border: 1px solid #000;
         width: fit-content;
@@ -303,11 +307,11 @@
         border-radius: .25rem;
     }
 
-    .product__reviews{
+    .product__reviews {
         cursor: pointer;
     }
 
-    .product__reviews:hover{
+    .product__reviews:hover {
         text-decoration: underline;
         text-underline-offset: .5rem;
     }
@@ -392,11 +396,6 @@
         const selectedOption = variantSelect.options[variantSelect.selectedIndex];
         const price = selectedOption.getAttribute('data-price');
 
-        console.log(price)
         priceElement.textContent = `$${price}`;
     });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        fetch('/cart.js').then(res => res.json()).then(data => console.log(data));
-    })
 </script>
