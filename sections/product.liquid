@@ -29,7 +29,7 @@
         {% form 'product', product %}
         {% if product.variants.size > 1 %}
         <div class="product__variant-select-container">
-            <select name="id" class="product__variant-select">
+            <select name="id" class="product__variant-select" data-product-handle="{{ product.handle }}">
                 {% for variant in product.variants %}
                 <option data-price="{{ variant.price |  money_without_currency }}" value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %} selected {% endif %}>
                     {{ variant.title }}
@@ -40,7 +40,11 @@
         {% else %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         {% endif %}
+        {% if product.selected_or_first_available_variant.available %}
         <button class="product__add-to-cart" type="submit"><span>ADD TO CART</span><span class="product__price">${{ product.selected_or_first_available_variant.price |  money_without_currency }}</span></button>
+        {% else %}
+        <button disabled class="product__add-to-cart-disabled" type="submit">SOLD OUT</button>
+        {% endif %}
         <script type="application/json" id="product__variants-json">
         {{ product.variants |  json }}
         </script>
@@ -227,7 +231,6 @@
         background: transparent;
         outline: none;
         margin-top: 1rem;
-        border: 0;
         cursor: pointer;
         text-wrap: nowrap;
     }
@@ -256,6 +259,18 @@
     .product-details>form button:hover span {
         color: #000;
         background: #fff;
+    }
+
+    .product__add-to-cart-disabled {
+        background: #fff;
+        color: #000;
+        flex: 1;
+        text-align: center;
+        padding: .75rem;
+        border-radius: .25rem 0 0 .25rem;
+        position: relative;
+        transition: all .3s ease-in-out;
+        border: 1px solid #000;
     }
 
     .product-details>ul {
@@ -390,20 +405,5 @@
                 }
             })
         })
-    })
-
-    const variantSelect = document.querySelector('.product__variant-select');
-    const priceElement = document.querySelector('.product__price');
-
-    variantSelect.addEventListener('change', function() {
-        const selectedOption = variantSelect.options[variantSelect.selectedIndex];
-        const price = selectedOption.getAttribute('data-price');
-
-        console.log(price)
-        priceElement.textContent = `$${price}`;
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        fetch('/cart.js').then(res => res.json()).then(data => console.log(data));
     })
 </script>

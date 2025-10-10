@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const selectedVariantID = document.querySelector('.product__variant-select').value;
       const selectedVariant = variants.find(variant => variant.id == selectedVariantID);
 
+      // Update preview images
+      const previewImagesGrid = document.querySelector('.product-images-carousel');
+      selectedVariant.images.forEach(image => {
+        console.log(image);
+      });
+
       // Update price
       document.querySelector('.product__price').innerText = formatMoney(selectedVariant.price);
       document.querySelector('.main-image-container img').src = selectedVariant.featured_image.src;
@@ -26,6 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.querySelector('.product__price').style.display = 'none';
       }
+
+      const productHandle = document.querySelector('.product__variant-select').getAttribute('data-product-handle')
+      window.history.replaceState({},'', `/products/${productHandle}?variant=${selectedVariantID}`)
       
       console.log(formatMoney(100000000, 'INR', 'en-IN'))
     });
