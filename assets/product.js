@@ -10,13 +10,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update preview images
       const previewImagesGrid = document.querySelector('.product-images-carousel');
+      previewImagesGrid.innerHTML = "";
       selectedVariant.images.forEach(image => {
-        console.log(image);
-      });
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('preview-image-container');
+        const img = document.createElement('img');
+        img.src = image;
+        
+        wrapper.appendChild(img)
+        previewImagesGrid.appendChild(wrapper);
+      })
 
       // Update price
       document.querySelector('.product__price').innerText = formatMoney(selectedVariant.price);
-      document.querySelector('.main-image-container img').src = selectedVariant.featured_image.src;
+      document.querySelector('.main-image-container img').src = selectedVariant.images[0];
 
       const addToCart = document.querySelector('.product__add-to-cart');
       if (selectedVariant.available) {
@@ -35,7 +42,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const productHandle = document.querySelector('.product__variant-select').getAttribute('data-product-handle')
       window.history.replaceState({},'', `/products/${productHandle}?variant=${selectedVariantID}`)
-      
-      console.log(formatMoney(100000000, 'INR', 'en-IN'))
     });
 });
