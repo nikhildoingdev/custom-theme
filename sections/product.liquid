@@ -1,9 +1,12 @@
 <script src="{{ 'product.js' |  asset_url }}"></script>
 
+{{ variant.metafields.custom.images.value }}
+{% assign images = product.selected_or_first_available_variant.metafields.custom.images.value %}
+
 <section>
     <div class="sub-section">
         <div class="product-images-carousel">
-            {% for image in product.images %}
+            {% for image in images %}
             <div class="preview-image-container">
                 <img src="{{ image |  image_url: width: 300  }}" alt="{{ image.alt }}">
             </div>
@@ -28,7 +31,7 @@
         <div class="product__variant-select-container">
             <select name="id" class="product__variant-select">
                 {% for variant in product.variants %}
-                <option data-price="{{ variant.price |  money_without_currency }}" value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% assign variant_price = variant.price | money %}{% endif %}>
+                <option data-price="{{ variant.price |  money_without_currency }}" value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %} selected {% endif %}>
                     {{ variant.title }}
                 </option>
                 {% endfor %}
@@ -37,7 +40,7 @@
         {% else %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         {% endif %}
-        <button type="submit"><span>ADD TO CART</span><span class="product__price">${{ product.selected_or_first_available_variant.price |  money_without_currency }}</span></button>
+        <button class="product__add-to-cart" type="submit"><span>ADD TO CART</span><span class="product__price">${{ product.selected_or_first_available_variant.price |  money_without_currency }}</span></button>
         <script type="application/json" id="product__variants-json">
         {{ product.variants |  json }}
         </script>
