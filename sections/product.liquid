@@ -27,7 +27,11 @@
     {% form 'product', product %}
       {% if product.variants.size > 1 %}
         <div class="product__variant-select-container">
-          <select name="id" class="product__variant-select" data-product-handle="{{ product.handle }}">
+          {% for product_option in product.options_with_values %}
+            {{ product_option.name }}
+          {% endfor %}
+
+          {% comment %} <select name="id" class="product__variant-select" data-product-handle="{{ product.handle }}">
             {% for variant in product.variants %}
               <option
                 data-price="{{ variant.price |  money_without_currency }}"
@@ -39,7 +43,7 @@
                 {{ variant.title }}
               </option>
             {% endfor %}
-          </select>
+          </select> {% endcomment %}
         </div>
       {% else %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
