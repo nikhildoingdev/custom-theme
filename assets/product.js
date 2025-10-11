@@ -1,90 +1,81 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .querySelector(".shopify-product-form")
-    .addEventListener("input", function (evt) {
-      evt.preventDefault();
-      const variants = JSON.parse(
-        document.getElementById("product__variants-json").innerText
-      );
-      console.log(variants);
+class ProductPage extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-      let selectedVariantID = null;
+  connectedCallback() {
+    this.handle = this.getAttribute("handle");
+    this.formElement = this.querySelector("form");
+    this.variantElement = this.querySelector(".product__variant-select");
 
-      if (!evt.target.classList.contains("product__variant-select")) {
-        const option1 =
-          this.querySelector('select[name="option1"]')?.value || null;
-        const option2 =
-          this.querySelector('select[name="option2"]')?.value || null;
+    this.variants = JSON.parse(document.getElementById("product__variants-json").innerText);
 
-        console.log(option1, option2);
+    this.selectedVariant = this.variants.find(variant => variant.id == this.variantElement.value);
 
-        const selectedVariant = variants.find(
-          (variant) => variant.option1 == option1 && variant.option2 == option2
-        );
+    this.formElement.addEventListener("input", this.updateVariantInfo.bind(this));
+  }
 
-        selectedVariantID = selectedVariant.id;
-        document.querySelector('.product__variant-select').value = selectedVariantID;
-      } else {
-        selectedVariantID = document.querySelector(
-          ".product__variant-select"
-        ).value;
-      }
+  variantFromOptionValues() {
+    const option1 = this.querySelector('select[name="option1"]')
+      ?.value || null;
+    const option2 = this.querySelector('select[name="option2"]')
+      ?.value || null;
 
-      const selectedVariant = variants.find(
-        (variant) => variant.id == selectedVariantID
-      );
+    const selectedVariant = this.variants.find(variant => variant.option1 == option1 && variant.option2 == option2);
+    return selectedVariant;
+  }
 
-      // Update preview images
-      const previewImagesGrid = document.querySelector(
-        ".product-images-carousel"
-      );
-      previewImagesGrid.innerHTML = "";
-      selectedVariant.images.forEach((image) => {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("preview-image-container");
-        const img = document.createElement("img");
-        img.src = image;
+  updateVariantInfo() {
+    this.selectedVariant = this.variantFromOptionValues();
 
-        wrapper.appendChild(img);
-        previewImagesGrid.appendChild(wrapper);
-      });
+    // Update preview images
+    const previewImagesGrid = this.querySelector(".product-images-carousel");
+    previewImagesGrid.innerHTML = "";
+    this.selectedVariant.images.forEach(image => {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("preview-image-container");
+      const img = document.createElement("img");
+      img.src = image;
 
-      // Update main image
-      document.querySelector(".main-image-container img").src =
-        selectedVariant.images[0];
-
-      const price = document.querySelector(".product__price");
-
-      // Update price
-      if (price) {
-        price.innerText = formatMoney(selectedVariant.price);
-      }
-
-      // Change add to cart button status
-      const submitButton = document.querySelector(".product__submit-button");
-      const addToCart = document.querySelector(".product__add-to-cart");
-
-      if (selectedVariant.available) {
-        submitButton.removeAttribute("disabled", "");
-
-        addToCart.innerText = "ADD TO CART";
-        submitButton.classList.remove("disabled");
-        addToCart.classList.remove("disabled");
-        document.querySelector(".product__price").style.display = "block";
-      } else {
-        submitButton.setAttribute("disabled", "");
-
-        addToCart.innerText = "SOLD OUT";
-        submitButton.classList.add("disabled");
-        addToCart.classList.add("disabled");
-        document.querySelector(".product__price").style.display = "none";
-      }
-
-      // Update url
-      window.history.replaceState(
-        {},
-        "",
-        `/products/${selectedVariant.product_handle}?variant=${selectedVariantID}`
-      );
+      wrapper.appendChild(img);
+      previewImagesGrid.appendChild(wrapper);
     });
-});
+
+    // Update main image
+    this.querySelector(".main-image-container img").src = this.selectedVariant.images[0];
+
+    // Update element
+    this.variantElement.value = this.selectedVariant.id;
+
+    const price = document.querySelector(".product__price");
+    // Update price
+    if (price) {
+      price.innerText = formatMoney(this.selectedVariant.price);
+    }
+
+    // Update button state
+    const submitButton = this.querySelector(".product__submit-button");
+    const addToCart = this.querySelector(".product__add-to-cart");
+
+    if (this.selectedVariant.available) {
+      submitButton.removeAttribute("disabled", "");
+
+      addToCart.innerText = "ADD TO CART";
+      submitButton.classList.remove("disabled");
+      addToCart.classList.remove("disabled");
+      this.querySelector(".product__price").style.display = "block";
+    } else {
+      submitButton.setAttribute("disabled", "");
+
+      addToCart.innerText = "SOLD OUT";
+      submitButton.classList.add("disabled");
+      addToCart.classList.add("disabled");
+      this.querySelector(".product__price").style.display = "none";
+    }
+
+    // Update history state
+    window.history.replaceState({}, "", `/products/${this.handle}?variant=${this.selectedVariant.id}`);
+  }
+}
+
+customElements.define("product-page", ProductPage);
