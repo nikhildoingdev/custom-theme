@@ -45,14 +45,16 @@
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
       {% endif %}
       {% if product.selected_or_first_available_variant.available %}
-        <button class="product__add-to-cart" type="submit">
-          <span>ADD TO CART</span
+        <button type="submit" class="product__submit-button">
+          <span class="product__add-to-cart">ADD TO CART</span
           ><span class="product__price"
             >${{ product.selected_or_first_available_variant.price | money_without_currency -}}
           </span>
         </button>
       {% else %}
-        <button disabled class="product__add-to-cart-disabled" type="submit">SOLD OUT</button>
+        <button class="product__submit-button disabled" type="submit" disabled><span class="product__add-to-cart disabled">SOLD OUT</span><span class="product__price" style="display: none;"
+            >${{ product.selected_or_first_available_variant.price | money_without_currency -}}
+          </span></button>
       {% endif %}
       <script type="application/json" id="product__variants-json">
         [
@@ -221,22 +223,25 @@
     color: #000;
   }
 
-  .product-details > form button {
+  .product__submit-button {
     display: flex;
     gap: 1px;
     width: 100%;
     background: transparent;
-    outline: none;
     margin-top: 1rem;
     cursor: pointer;
     text-wrap: nowrap;
+    text-align: center;
   }
 
-  .product-details > form button > span:first-child {
+  .product__submit-button.disabled{
+    cursor: not-allowed;
+  }
+
+  .product__add-to-cart {
     background: #000;
     color: #fff;
     flex: 1;
-    text-align: center;
     padding: 0.75rem;
     border-radius: 0.25rem 0 0 0.25rem;
     position: relative;
@@ -253,21 +258,18 @@
     transition: all 0.3s ease-in-out;
   }
 
-  .product-details > form button:hover span {
+  .product__submit-button:hover span {
     color: #000;
     background: #fff;
   }
 
-  .product__add-to-cart-disabled {
+  .product__add-to-cart.disabled {
     background: #fff;
     color: #000;
-    flex: 1;
-    text-align: center;
-    padding: 0.75rem;
-    border-radius: 0.25rem 0 0 0.25rem;
-    position: relative;
-    transition: all 0.3s ease-in-out;
+    border-radius: 0.25rem;
     border: 1px solid #000;
+    pointer-events: none;
+    cursor: not-allowed;
   }
 
   .product-details > ul {

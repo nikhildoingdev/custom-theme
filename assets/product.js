@@ -32,32 +32,32 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update main image
       document.querySelector(".main-image-container img").src =
         selectedVariant.images[0];
+      
+      const price = document.querySelector(".product__price");
 
       // Update price
-      document.querySelector(".product__price").innerText = formatMoney(
-        selectedVariant.price
-      );
+      if (price) {
+       price.innerText = formatMoney(selectedVariant.price)
+     }
 
       // Change add to cart button status
+      const submitButton = document.querySelector(".product__submit-button");
       const addToCart = document.querySelector(".product__add-to-cart");
+
       if (selectedVariant.available) {
-        addToCart.removeAttribute("disabled", "");
+        submitButton.removeAttribute("disabled", "");
 
-        addToCart.querySelector("span").innerText = "ADD TO CART";
-        addToCart.querySelector("span").style.borderRadius = ".25rem 0 0 .25rem";
-        addToCart.querySelector("span").style.background = "#000";
-        addToCart.querySelector("span").style.color = "#fff";
-        addToCart.querySelector("span").style.cursor = "pointer";
-        addToCart.querySelector("span").style.pointerEvents = "default";
+        addToCart.innerText = "ADD TO CART";
+        submitButton.classList.remove('disabled');
+        addToCart.classList.remove('disabled');
         document.querySelector(".product__price").style.display = "block";
-      } else {
-        addToCart.setAttribute("disabled", "");
 
-        addToCart.querySelector("span").innerText = "SOLD OUT";
-        addToCart.querySelector("span").style.borderRadius = ".25rem";
-        addToCart.querySelector("span").style.background = "#fff";
-        addToCart.querySelector("span").style.color = "#000";
-        addToCart.querySelector("span").style.cursor = "not-allowed";
+      } else {
+        submitButton.setAttribute("disabled", "");
+
+        addToCart.innerText = "SOLD OUT";
+        submitButton.classList.add('disabled');
+        addToCart.classList.add('disabled');
         document.querySelector(".product__price").style.display = "none";
       }
 
