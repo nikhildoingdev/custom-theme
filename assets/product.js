@@ -1,15 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelector(".shopify-product-form")
-    .addEventListener("input", (evt) => {
+    .addEventListener("input", function (evt) {
       evt.preventDefault();
       const variants = JSON.parse(
         document.getElementById("product__variants-json").innerText
       );
       console.log(variants);
-      const selectedVariantID = document.querySelector(
-        ".product__variant-select"
-      ).value;
+
+      let selectedVariantID = null;
+
+      if (!evt.target.classList.contains("product__variant-select")) {
+        const option1 =
+          this.querySelector('select[name="option1"]')?.value || null;
+        const option2 =
+          this.querySelector('select[name="option2"]')?.value || null;
+
+        console.log(option1, option2);
+
+        const selectedVariant = variants.find(
+          (variant) => variant.option1 == option1 && variant.option2 == option2
+        );
+
+        selectedVariantID = selectedVariant.id;
+        document.querySelector('.product__variant-select').value = selectedVariantID;
+      } else {
+        selectedVariantID = document.querySelector(
+          ".product__variant-select"
+        ).value;
+      }
+
       const selectedVariant = variants.find(
         (variant) => variant.id == selectedVariantID
       );
@@ -32,13 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update main image
       document.querySelector(".main-image-container img").src =
         selectedVariant.images[0];
-      
+
       const price = document.querySelector(".product__price");
 
       // Update price
       if (price) {
-       price.innerText = formatMoney(selectedVariant.price)
-     }
+        price.innerText = formatMoney(selectedVariant.price);
+      }
 
       // Change add to cart button status
       const submitButton = document.querySelector(".product__submit-button");
@@ -48,16 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
         submitButton.removeAttribute("disabled", "");
 
         addToCart.innerText = "ADD TO CART";
-        submitButton.classList.remove('disabled');
-        addToCart.classList.remove('disabled');
+        submitButton.classList.remove("disabled");
+        addToCart.classList.remove("disabled");
         document.querySelector(".product__price").style.display = "block";
-
       } else {
         submitButton.setAttribute("disabled", "");
 
         addToCart.innerText = "SOLD OUT";
-        submitButton.classList.add('disabled');
-        addToCart.classList.add('disabled');
+        submitButton.classList.add("disabled");
+        addToCart.classList.add("disabled");
         document.querySelector(".product__price").style.display = "none";
       }
 
