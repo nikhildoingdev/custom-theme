@@ -16,17 +16,20 @@ class ProductPage extends HTMLElement {
   }
 
   variantFromOptionValues() {
-    const option1 = this.querySelector('select[name="option1"]')
+    const option1 = this.querySelector('input[name="option1"]:checked')
       ?.value || null;
-    const option2 = this.querySelector('select[name="option2"]')
+    const option2 = this.querySelector('input[name="option2"]:checked')
       ?.value || null;
+    
+    console.log(option1, option2)
 
-    const selectedVariant = this.variants.find(variant => variant.option1 == option1 && variant.option2 == option2);
-    return selectedVariant;
+    return this.variants.find(variant => variant.option1 == option1 && variant.option2 == option2);
   }
 
   updateVariantInfo() {
     this.selectedVariant = this.variantFromOptionValues();
+
+    console.log(this.selectedVariant)
 
     // Update preview images
     const previewImagesGrid = this.querySelector(".product-images-carousel");

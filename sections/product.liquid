@@ -25,21 +25,18 @@
       </div>
       {% form 'product', product %}
         {% if product.variants.size > 1 %}
-          <div class="">
+          <div class="product__options">
           {% for product_option in product.options_with_values %}
-            <div>
-              <h3>{{ product_option.name }}</h3>
-              <div class="product__variant-select-container">
-                <select name="option{{ product_option.position }}" id="">
-                  {% for value in product_option.values %}
-                    <option {% if value.selected %}selected{% endif %}>{{ value.name }}</option>
-                  {% endfor %}
-                </select>
-              </div>
+            <div class="product__option">
+              {% for value in product_option.values %}
+                {% assign id = product_option.name |  append: '-' |  append: value.name |  handleize %}
+              <input id="{{ id }}" type="radio" name="option{{ product_option.position }}" value="{{ value.name }}" {% if value.selected %}checked{% endif %}>
+                <label for="{{ id }}" class="product__select-label">{{ value.name }}</label>
+              {% endfor %}
               </div>
             {% endfor %}
             </div>
-
+            
             <input class="product__variant-select" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         {% else %}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
@@ -147,6 +144,41 @@
 
 
 <style>
+  input[type="radio"]{
+    position: absolute;
+    height: 0;
+    width: 0;
+    opacity: 0;
+  }
+
+  .product__select-label{
+    padding: .75rem 2rem;
+    border: 1px solid #000;
+    border-radius: 100px;
+    cursor: pointer;
+    user-select: none;
+    transition: all .3s ease-in-out;
+  }
+
+  input[type="radio"]:checked + .product__select-label{
+    background: #000;
+    color: #fff;
+  }
+
+  .product__options{
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .product__option{
+    display: flex;
+    gap: .5rem;
+  }
+
+
+
   /* Layout Settings */
   section {
     display: flex;
@@ -209,7 +241,6 @@
     display: flex;
     gap: 2px;
     align-items: center;
-    margin-top: 0.5rem;
   }
 
   .ratings > p {
