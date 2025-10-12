@@ -57,7 +57,6 @@
                 <input type="text" placeholder="Enter Search" name="q" value="{{ search.terms | escape }}">
             </form>
         </div>
-
         <a href="/cart" class="header__cart">Bag</a>
     </div>
 </header>
@@ -131,8 +130,12 @@
     }
 
     .header__cart::before {
-        content: "";
+        content: "{{ cart.item_count }}";
+        color: #fff;
         position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         top: 50%;
         right: 40px;
         width: 20px;
