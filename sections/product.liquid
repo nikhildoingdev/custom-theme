@@ -69,6 +69,7 @@
         </script>
       {% endform %}
       <ul>
+
         <li>
           <div class="star-icon-container">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 20 20" fill="none">
@@ -99,30 +100,12 @@
       </ul>
 
       <div class="faq">
-        <details open>
-          <summary>PRODUCT DESCRIPTION</summary>
-          <p>
-            The Classic Lip is a lightweight, richly pigmented lipstick with a satin finish. It features peptides and
-            vitamin E to smooth and condition your lips. Available in 12 shades from neutral to bold, it’s the kind of
-            classic that never goes out of style.
-            <p>(3.4g / 0.12 oz)</p>
-          </p>
+        {% for faq in product.metafields.custom.faqs.value %}
+         <details {% if forloop.first %}open{% endif %}>
+          <summary>{{ faq.question }}</summary>
+          <p>{{ faq.answer }}</p>
         </details>
-        <details>
-          <summary>HOW TO USE</summary>
-          <p>
-            Apply to your lips directly out of the tube or with a brush, starting in the center of your bottom lip and
-            working your way out to the edges. Smack your lips together to transfer the color to your top lip.
-          </p>
-        </details>
-        <details>
-          <summary>INGREDIENTS</summary>
-          <strong>PEPTIDE</strong>
-          <p>
-            Skin-conditioning peptide made up of 3 amino acids (glycine, lysine, and histidine) that improves appearance
-            of the skin/lips by looking smoother, firmer, and reducing the appearance of fine lines.
-          </p>
-        </details>
+        {% endfor %}
       </div>
 
       <h2 class="product__creator-section-title">Created by</h2>
