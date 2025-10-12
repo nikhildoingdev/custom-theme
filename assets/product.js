@@ -28,6 +28,7 @@ class ProductPage extends HTMLElement {
 
   updateVariantInfo() {
     this.selectedVariant = this.variantFromOptionValues();
+    document.querySelector('side-cart').changeH1(this.selectedVariant.option1);
 
     console.log(this.selectedVariant)
 
