@@ -95,6 +95,7 @@
         border-bottom: 1px solid lightgray;
         gap: 1rem;
         z-index: 2;
+        position: relative;
     }
 
     .header__menu {
@@ -200,23 +201,35 @@
     @media (max-width: 768px) {
         header {
             padding: 2rem 1rem;
+            justify-content: center;
         }
 
         .header__menu {
             display: block;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1rem;
         }
 
         .header__links {
             display: none;
         }
 
-        .header-logo {
-            min-width: 180px;
-            justify-self: flex-start;
+        .header__right-section{
+            position: absolute;
+            right: 1rem;
+            width: fit-content;
         }
 
         .header__cart {
             width: auto;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .header__search{
+            display: none;
         }
     }
 </style>

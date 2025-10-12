@@ -21,16 +21,12 @@ class ProductPage extends HTMLElement {
     const option2 = this.querySelector('input[name="option2"]:checked')
       ?.value || null;
     
-    console.log(option1, option2)
 
     return this.variants.find(variant => variant.option1 == option1 && variant.option2 == option2);
   }
 
   updateVariantInfo() {
     this.selectedVariant = this.variantFromOptionValues();
-    document.querySelector('side-cart').changeH1(this.selectedVariant.option1);
-
-    console.log(this.selectedVariant)
 
     // Update preview images
     const previewImagesGrid = this.querySelector(".product-images-carousel");
