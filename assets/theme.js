@@ -6,3 +6,14 @@ function formatMoney(cents, currency = 'USD', locale = 'en-US') {
   }).format(cents / 100);
 }
 
+// Helper function to debounce search
+function debounce(func, delay) {
+  let timeoutID;
+  return function (...args) {
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+

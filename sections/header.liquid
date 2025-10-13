@@ -68,6 +68,25 @@
       searchForm.querySelector('input').focus();
       searchForm.querySelector('input').select();
     })
+
+    searchForm.querySelector('input').addEventListener('input', debounce(search(evt), 500))
+
+    function search(evt){
+        fetch(window.Shopify.routes.root + `search/suggest.json?q=${this.value && this.value}&resources[type]=product&resources[options][unavailable_products]=hide&resources[options][fields]=title,product_type,variants.title`)
+        .then((response) => response.json())
+        .then((suggestions) => {
+        const productSuggestions = suggestions.resources.results.products;
+
+        if (productSuggestions.length > 0) {
+        const firstProductSuggestion = productSuggestions[0];
+
+        alert(`The title of the first product suggestion is: ${
+            firstProductSuggestion.title}`
+        );
+        }
+        }
+        );
+    }
 </script>
 
 <style>
@@ -76,14 +95,15 @@
         position: absolute;
         top: -50%;
         right: calc(100% - 2rem);
-        border-bottom: 1px solid #000;
-      }
-      
-      .header__search-form input {
+        height: 400px;
+    }
+    
+    .header__search-form input {
         padding: .5rem 1rem;
         border: 0;
         background: transparent;
         outline: 0;
+        border-bottom: 1px solid #000;
     }
 
 
