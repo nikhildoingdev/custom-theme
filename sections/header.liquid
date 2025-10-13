@@ -55,6 +55,11 @@
             </svg>
             <form class="header__search-form" action="{{ routes.search_url }}">
                 <input type="text" placeholder="Enter Search" name="q" value="{{ search.terms | escape }}">
+                <div class="header__search-form-results">
+                    <div class="header__products-results">
+
+                    </div>
+                </div>
             </form>
         </div>
         <a href="/cart" class="header__cart">Bag</a>
@@ -62,31 +67,43 @@
 </header>
 
 <script>
-    const searchForm = document.querySelector('.header__search-form');
-    document.querySelector('.header__search').addEventListener("click", () => {
-      searchForm.style.display = "block";
-      searchForm.querySelector('input').focus();
-      searchForm.querySelector('input').select();
-    })
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.querySelector('.header__search-form');
+        const searchResults = document.querySelector('.header__products-results');
+        document.querySelector('.header__search').addEventListener("click", () => {
+        searchForm.style.display = "block";
+        searchForm.querySelector('input').focus();
+        searchForm.querySelector('input').select();
+        })
 
-    searchForm.querySelector('input').addEventListener('input', debounce(search(evt), 500))
-
-    function search(evt){
+        const search = debounce(function() {
+        if (this.value) {
         fetch(window.Shopify.routes.root + `search/suggest.json?q=${this.value && this.value}&resources[type]=product&resources[options][unavailable_products]=hide&resources[options][fields]=title,product_type,variants.title`)
         .then((response) => response.json())
         .then((suggestions) => {
         const productSuggestions = suggestions.resources.results.products;
 
-        if (productSuggestions.length > 0) {
-        const firstProductSuggestion = productSuggestions[0];
+                        if (productSuggestions.length > 0) {
 
-        alert(`The title of the first product suggestion is: ${
-            firstProductSuggestion.title}`
-        );
-        }
-        }
-        );
-    }
+                            console.log(productSuggestions)
+                            searchResults.innerHTML = "";
+                            productSuggestions.forEach(suggestion => {
+                            searchResults.innerHTML += `
+                            <a href="${suggestion.url}" class='search__result-item'>
+                                <div class="suggested-image-container">
+                                    <img src="${suggestion.image}&width=100" />
+                                </div>
+                                <h3>${suggestion.title}</h3>
+                            </a>
+                            `;
+                            });
+                            }
+                    });
+            }
+        }, 500)
+
+        searchForm.querySelector('input').addEventListener('input', search)
+        })
 </script>
 
 <style>
@@ -95,15 +112,37 @@
         position: absolute;
         top: -50%;
         right: calc(100% - 2rem);
-        height: 400px;
+        background: #fff;
+        border: 1px solid lightgray;
     }
-    
+
     .header__search-form input {
         padding: .5rem 1rem;
         border: 0;
         background: transparent;
         outline: 0;
         border-bottom: 1px solid #000;
+        }
+
+        .header__products-results {
+        overflow: auto;
+        }
+
+        .search__result-item {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid #000;
+        padding: 1rem;
+        }
+
+        .search__result-item>h3{
+        font-size: 0.75rem;
+        font-weight: 500;
+        }
+
+        .suggested-image-container {
+        width: 50px;
+        aspect-ratio: 1;
     }
 
 
@@ -236,7 +275,7 @@
             display: none;
         }
 
-        .header__right-section{
+        .header__right-section {
             position: absolute;
             right: 1rem;
             width: fit-content;
@@ -248,7 +287,7 @@
     }
 
     @media (max-width: 500px) {
-        .header__search{
+        .header__search {
             display: none;
         }
     }
